@@ -21,13 +21,14 @@ class ViewController: UIViewController {
         let circleDiameter = 50.0
         let width = CGFloat(count+1)/2.0 * circleDiameter
         let bounds = CGRect(origin: CGPointZero, size: CGSize(width: width, height: circleDiameter))
-        var x = 0.0
         let circleColor =  UIColor(_colorLiteralRed: 161.0/255, green: 62.0/255, blue: 3.0/255, alpha: 1.0)
         let renderer = UIGraphicsImageRenderer(size: bounds.size)
         image = renderer.image { context in
-            for _ in 1...count {
-                context.cgContext.setLineWidth(lineWidth)
-                let circleRect = CGRect(x: x, y: 0, width: circleDiameter, height: circleDiameter)
+            for index in 0..<count {
+                let x = CGFloat(index) * circleDiameter / 2
+                let circleRect = CGRect(
+                    x: x, y: 0,
+                    width: circleDiameter, height: circleDiameter)
                 let circle = UIBezierPath.init(ovalIn: circleRect)
                 circle.lineWidth = lineWidth
                 circleColor.setFill()
@@ -41,7 +42,6 @@ class ViewController: UIViewController {
                 
                 // Erase the outline of this circle
                 circle.stroke()
-                x += circleDiameter / 2
             }
         }
         // Place the image view near the bottom of the content view, and on the right side.
@@ -51,6 +51,8 @@ class ViewController: UIViewController {
     }
 
     override func viewDidLayoutSubviews() {
+        // You need to create teh image view when the view changes its subviews
+        //so that it is placed correctly (e.g. after device rotation)
         setShades(count: 4)
     }
 
